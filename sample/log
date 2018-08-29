@@ -1,0 +1,1 @@
+owner backet [29/Aug/2018:15:00:36 +0000] 0.0.0.0 arn:aws:sts::1:role 1 REST.HEAD.OBJECT key "HEAD /path HTTP/1.1" 200 - - 0 10 - "-" "agent" -

@@ -1,0 +1,13 @@
+name: s3log
+version: 0.1.0
+
+authors:
+  - maiha <maiha@wota.jp>
+
+targets:
+  s3log:
+    main: src/main/s3log.cr
+
+crystal: 0.25.0
+
+license: MIT
