@@ -5,8 +5,6 @@ module S3Log
     
     @[Flags]
     enum Option
-      Date
-      Header
       Clickhouse
       FailFast
     end
@@ -61,7 +59,7 @@ module S3Log
     end
 
     private def needs_date?
-      @options.date? || @options.clickhouse?
+      @options.clickhouse?
     end
   end
 end

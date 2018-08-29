@@ -1,5 +1,5 @@
 /docs/
 /lib/
-/bin/
+/bin/s3log
 /.shards/
 *.dwarf

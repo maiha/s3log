@@ -1,8 +1,9 @@
+# stds
 require "json"
 
-module S3Log
-  SAMPLE = {{ system("cat " + env("PWD") + "/sample/log").stringify }}
-end
+# shards
+require "opts"
 
+# app
 require "./s3log/*"
 
