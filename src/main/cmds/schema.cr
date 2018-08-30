@@ -26,7 +26,7 @@ class Cmds::Schema
 
   def clickhouse_schema : String
     String.build do |io|
-      io << "ATTACH TABLE %s\n" % @table_name
+      io << "ATTACH TABLE IF NOT EXISTS %s\n" % @table_name
       io << "(\n"
       io << headers.map{|key| "    %s %s" % [key, column_type(key)]}
                     .join(",\n") << "\n"
