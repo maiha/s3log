@@ -58,7 +58,7 @@ module S3Log
         # 29/Aug/2018:15:00:36 +0000
         time = Time.parse(v, "%d/%b/%Y:%H:%M:%S %z", Time::Location.local).to_local
         hash["date"] = time.to_s("%Y-%m-%d")
-        hash["timestamp"] = time.to_s
+        hash["timestamp"] = time.to_s("%Y-%m-%d %H:%M:%S")
       end
     end
 

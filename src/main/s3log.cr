@@ -51,6 +51,15 @@ class Main
       abort "ERROR: No commands\nExpected one of: %s" % CMDS.join(", ")
     end
   end
+
+  def on_error(err : Errno)
+    case err.message.to_s
+    when /Broken pipe/
+      exit 1
+    else
+      super(err)
+    end
+  end
 end
 
 Main.run

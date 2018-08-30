@@ -1,13 +1,19 @@
 class Cmds::Schema
-  def self.run(options, table_name : String)
-    new(options, table_name).run
+  def self.run(option, table_name : String)
+    new(option, table_name).run
   end
 
-  def initialize(@options : S3Log::Parser::Option, @table_name : String)
+  DEFAULT_COLUMN_TYPE = "String"
+  SPECIAL_COLUMN_TYPES = {
+    "date"      => "Date",
+    "timestamp" => "DateTime",
+  }
+  
+  def initialize(@option : S3Log::Parser::Option, @table_name : String)
   end
 
   def run
-    if @options.clickhouse?
+    if @option.clickhouse?
       puts clickhouse_schema
     else
       puts headers
@@ -15,7 +21,7 @@ class Cmds::Schema
   end
 
   def headers : Array(String)
-    S3Log::Parser.new(@options).headers
+    S3Log::Parser.new(@option).headers
   end
 
   def clickhouse_schema : String
@@ -30,9 +36,6 @@ class Cmds::Schema
   end
 
   def column_type(key : String) : String
-    case key
-    when "date"; "Date"
-    else       ; "String"
-    end        
+    SPECIAL_COLUMN_TYPES[key]? || DEFAULT_COLUMN_TYPE
   end
 end
