@@ -44,6 +44,10 @@ module S3Log
       end
     end
 
+    def failure?
+      @failure > 0
+    end
+
     def to_s(io : IO)
       io << "total: #{@total}, success: #{@success}, failure: #{@failure}"
     end

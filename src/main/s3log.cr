@@ -26,6 +26,7 @@ class Main
 
   option clickhouse : Bool, "--clickhouse", "ClickHouse mode", false
   option failfast   : Bool, "--fail-fast", "Abort the run on first failure", false
+  option dryrun     : Bool, "-n", "Dryrun for check", false
   option help       : Bool, "--help"   , "Show this help", false
   option version    : Bool, "--version", "Print the version and exit", false
 
@@ -40,7 +41,7 @@ class Main
   def run
     case args.shift?
     when "json"
-      Cmds::Parse.run(ARGF.gets_to_end, parse_options)
+      Cmds::Parse.run(ARGF.gets_to_end, parse_options, dryrun: dryrun?)
     when "sample"
       Cmds::Sample.run
     when "schema"

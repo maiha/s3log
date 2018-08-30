@@ -1,0 +1,18 @@
+version: 1.0
+shards:
+  opts:
+    github: maiha/opts.cr
+    version: 0.5.0
+
+  pretty:
+    github: maiha/pretty.cr
+    version: 0.6.0
+
+  shard:
+    github: maiha/shard.cr
+    version: 0.3.0
+
+  var:
+    github: maiha/var.cr
+    version: 0.2.1
+
