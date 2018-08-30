@@ -1,7 +1,7 @@
 module S3Log
   class Parser
     # original: https://dev.classmethod.jp/etc/parsing-s3-server-access-log-file-final/
-    REGEX = %r{^(?<bucketOwner>[\w]+) (?<bucket>[\w\-.]+|-) \[(?<timestamp>[a-zA-Z0-9/: \+]+)\] (?<remoteIp>[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}) (?<requester>[\w\.\-:/]+|Anonymous) (?<requestId>[\w]+) (?<operation>[\w\.]+) (?<key>[\w/_.-]+|-) "(?<requestScheme>(GET|PUT|POST|PATCH|DELETE|HEAD)) (?<requestPath>.*?) ?(?<requestProtocol>[\w/.]+)?" (?<status>[0-9]{3}) (?<errorCode>[\w\-]+|-) (?<bytesSent>[0-9]+|-) (?<objectSize>[0-9]+|-) (?<totalTime>[0-9]+|-) (?<turnAroundTime>[0-9]+|-) ("(?<referrer>(http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?)|-)") (?<userAgent>"(.+|-)") (?<versionId>[\w-]+|-)$}m
+    REGEX = %r{^(?<bucketOwner>[\w]+) (?<bucket>[\w\-.]+|-) \[(?<timestamp>[a-zA-Z0-9/: \+]+)\] (?<remoteIp>[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}) (?<requester>[\w\.\-:/]+|Anonymous) (?<requestId>[\w]+) (?<operation>[\w\.]+) (?<key>[^ ]+) "(?<requestScheme>(GET|PUT|POST|PATCH|DELETE|HEAD)) (?<requestPath>.*?) ?(?<requestProtocol>[\w/.]+)?" (?<status>[0-9]{3}) (?<errorCode>[\w\-]+|-) (?<bytesSent>[0-9]+|-) (?<objectSize>[0-9]+|-) (?<totalTime>[0-9]+|-) (?<turnAroundTime>[0-9]+|-) ("(?<referrer>(http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?)|-)") (?<userAgent>"(.+|-)") (?<versionId>[\w-]+|-)$}m
     
     @[Flags]
     enum Option
