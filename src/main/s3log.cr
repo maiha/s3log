@@ -24,6 +24,7 @@ class Main
       s3log json --clickhouse LOG_FILE | clickhouse-client --query="INSERT INTO s3logs FORMAT JSONEachRow"
     EOF
 
+  option table_name : String, "--table NAME", "Specify table name for schema", "s3logs"
   option clickhouse : Bool, "--clickhouse", "ClickHouse mode", false
   option failfast   : Bool, "--fail-fast", "Abort the run on first failure", false
   option dryrun     : Bool, "-n", "Dryrun for check", false
@@ -45,7 +46,7 @@ class Main
     when "sample"
       Cmds::Sample.run
     when "schema"
-      Cmds::Schema.run(parse_options)
+      Cmds::Schema.run(parse_options, table_name: table_name)
     else
       abort "ERROR: No commands\nExpected one of: %s" % CMDS.join(", ")
     end

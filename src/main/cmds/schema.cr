@@ -1,26 +1,38 @@
-module Cmds::Schema
-  def self.run(options)
-    if options.clickhouse?
-      puts clickhouse(headers(options))
+class Cmds::Schema
+  def self.run(options, table_name : String)
+    new(options, table_name).run
+  end
+
+  def initialize(@options : S3Log::Parser::Option, @table_name : String)
+  end
+
+  def run
+    if @options.clickhouse?
+      puts clickhouse_schema
     else
-      puts headers(options)
+      puts headers
     end
   end
 
-  def self.headers(options)
-    S3Log::Parser.new(options).headers
+  def headers : Array(String)
+    S3Log::Parser.new(@options).headers
   end
 
-  def self.clickhouse(keys) : String
+  def clickhouse_schema : String
     String.build do |io|
-      io << "ATTACH TABLE s3logs\n"
+      io << "ATTACH TABLE %s\n" % @table_name
       io << "(\n"
-      io << keys.map{|key|
-        val = (key == "date") ? "Date" : "String"
-        "    %s %s" % [key, val]
-      }.join(",\n") << "\n"
+      io << headers.map{|key| "    %s %s" % [key, column_type(key)]}
+                    .join(",\n") << "\n"
       io << ")\n"
-      io << "ENGINE = MergeTree(date, (timestamp, key), 8192)\n"
+      io << "ENGINE = MergeTree(date, timestamp, 8192)\n"
     end    
+  end
+
+  def column_type(key : String) : String
+    case key
+    when "date"; "Date"
+    else       ; "String"
+    end        
   end
 end
