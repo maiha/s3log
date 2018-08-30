@@ -57,8 +57,15 @@ $ s3log json --clickhouse LOG_FILE | clickhouse-client --query="INSERT INTO s3lo
 └───────────────┴─────────┘
 ```
 
-It'd be better to create dated tables for production use.
-Here, we assume that all log files of '2018-08-29-*' are stored in `2018-08-29/` dir.
+## Production use with ClickHouse
+
+In a production environment it is more convenient to divide it into
+smaller tables than to use in a single table to facilitate partial updates.
+
+For example, suppose that the `2018-08-29/` directory contains log files
+for 2018-08-29. Here, we put them into `s3logs_20180829` table, and then
+we use it via merge table `s3logs`.
+
 ```console
 ### create dated table
 $ s3log schema --clickhouse --table "s3logs_20180829" | clickhouse-client

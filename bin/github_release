@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# https://github.com/aktau/github-release
+
 set -eu
 
 # custom setting
@@ -11,7 +13,7 @@ user="maiha"
 repo=$(basename `git rev-parse --show-toplevel`)
 body=`sha256sum $bin`
 
-cmd="github-release upload --owner='$user' --repo='$repo' --tag='$tag' --name='$tag' --body='$body' '$bin'"
+cmd="github-release upload --user='$user' --repo='$repo' --tag='$tag' --name='$(basename $bin)' --file='$bin'"
 
 # env
 : ${GITHUB_TOKEN?"Need to set GITHUB_TOKEN"}

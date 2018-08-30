@@ -22,5 +22,5 @@ static: src/main/s3log.cr
 
 .PHONY : github_release
 github_release:
-	@github-release
+	@github-release --version
 	@./bin/github_release
