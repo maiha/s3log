@@ -27,7 +27,8 @@ class Main
   option table_name : String, "--table NAME", "Specify table name for schema", "s3logs"
   option clickhouse : Bool, "--clickhouse", "ClickHouse mode", false
   option failfast   : Bool, "--fail-fast", "Abort the run on first failure", false
-  option dryrun     : Bool, "-n", "Dryrun for check", false
+  option merge      : Bool, "--merge", "Use merge table (schema command)", false
+  option dryrun     : Bool, "-n", "Dryrun (json command)", false
   option help       : Bool, "--help"   , "Show this help", false
   option version    : Bool, "--version", "Print the version and exit", false
 
@@ -46,7 +47,7 @@ class Main
     when "sample"
       Cmds::Sample.run
     when "schema"
-      Cmds::Schema.run(parse_options, table_name: table_name)
+      Cmds::Schema.new(parse_options, table_name: table_name, merge: merge?).run
     else
       abort "ERROR: No commands\nExpected one of: %s" % CMDS.join(", ")
     end

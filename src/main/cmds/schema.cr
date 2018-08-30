@@ -1,15 +1,11 @@
 class Cmds::Schema
-  def self.run(option, table_name : String)
-    new(option, table_name).run
-  end
-
   DEFAULT_COLUMN_TYPE = "String"
   SPECIAL_COLUMN_TYPES = {
     "date"      => "Date",
     "timestamp" => "DateTime",
   }
   
-  def initialize(@option : S3Log::Parser::Option, @table_name : String)
+  def initialize(@option : S3Log::Parser::Option, @table_name : String, @merge : Bool)
   end
 
   def run
@@ -26,12 +22,15 @@ class Cmds::Schema
 
   def clickhouse_schema : String
     String.build do |io|
-      io << "ATTACH TABLE IF NOT EXISTS %s\n" % @table_name
+      io << "CREATE TABLE IF NOT EXISTS %s\n" % @table_name
       io << "(\n"
-      io << headers.map{|key| "    %s %s" % [key, column_type(key)]}
-                    .join(",\n") << "\n"
+      io << headers.map{|key| "    %s %s" % [key, column_type(key)]}.join(",\n") << "\n"
       io << ")\n"
-      io << "ENGINE = MergeTree(date, timestamp, 8192)\n"
+      if @merge
+        io << "ENGINE = Merge(currentDatabase(), '^%s_')\n" % [@table_name, @table_name]
+      else
+        io << "ENGINE = MergeTree(date, timestamp, 8192)\n"
+      end
     end    
   end
 
