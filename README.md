@@ -67,15 +67,17 @@ for 2018-08-29. Here, we put them into `s3logs_20180829` table, and then
 we use it via merge table `s3logs`.
 
 ```console
-### create dated table
-$ s3log schema --clickhouse --table "s3logs_20180829" | clickhouse-client
-
-### create merge table
+### create merge table (first time only)
 $ s3log schema --clickhouse --table "s3logs" --merge | clickhouse-client
 
+### create current date table (ex. 20180829)
+$ s3log schema --clickhouse --table "s3logs_20180829" | clickhouse-client
+
 ### import with idempotency (replace the table)
-$ clickhouse-client --query="DROP TABLE IF EXISTS s3logs_20180829"
-$ cat 2018-08-29/* | s3log json --clickhouse | clickhouse-client --query="INSERT INTO s3logs_20180829 FORMAT JSONEachRow"
+$ s3log schema --clickhouse --table "tmp_s3logs_20180829" | clickhouse-client
+$ cat 2018-08-29/* | s3log json --clickhouse | clickhouse-client --query="INSERT INTO tmp_s3logs_20180829 FORMAT JSONEachRow"
+$ clickhouse-client --query="RENAME TABLE s3logs_20180829 TO tmp_s3logs_20180829_old, tmp_s3logs_20180829 TO s3logs_20180829"
+$ clickhouse-client --query="DROP TABLE tmp_s3logs_20180829_old"
 
 ### play with distributed table "s3logs"
 $ clickhouse-client --query="show tables"
